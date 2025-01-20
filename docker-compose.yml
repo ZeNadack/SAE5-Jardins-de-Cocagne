@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - localhost
+    environment:
+      - DATABASE_HOST=localhost
+      - DATABASE_NAME=jardinsdecocagne
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+
+  localhost:
+    image: mysql:8.0
+    container_name: mysql_container
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jardinsdecocagne
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: localhost
+      PMA_PORT: 3306
+    depends_on:
+      - localhost
+
+volumes:
+  localhost_data:
