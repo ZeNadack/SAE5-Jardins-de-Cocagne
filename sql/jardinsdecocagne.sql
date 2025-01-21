@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 16 jan. 2025 à 21:05
+-- Généré le : mar. 21 jan. 2025 à 11:11
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.2.19
 
@@ -273,7 +273,7 @@ ALTER TABLE `tournees`
 -- AUTO_INCREMENT pour la table `abonnements`
 --
 ALTER TABLE `abonnements`
-  MODIFY `idabonnement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idabonnement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `adherence`
