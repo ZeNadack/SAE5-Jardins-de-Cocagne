@@ -32,7 +32,7 @@ class TourneeController {
         $points = $_POST['points']; // Array of point IDs in order
 
         $this->model->createTournee($libelle, $jourPreparation, $jourLivraison, $couleur, $points);
-        header('Location: index.php');
+        header('Location: ../tournee.php');
     }
 }
 ?>
