@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:3306
--- Généré le : mar. 21 jan. 2025 à 11:11
--- Version du serveur :  5.7.24
--- Version de PHP : 7.2.19
+-- Hôte : db:3306
+-- Généré le : mer. 22 jan. 2025 à 17:47
+-- Version du serveur : 8.0.41
+-- Version de PHP : 8.2.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `jardinsdecocagne`
 --
-CREATE DATABASE IF NOT EXISTS `jardinsdecocagne` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `jardinsdecocagne` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `jardinsdecocagne`;
 
 -- --------------------------------------------------------
@@ -31,9 +30,9 @@ USE `jardinsdecocagne`;
 --
 
 CREATE TABLE `abonnements` (
-  `idabonnement` int(11) NOT NULL,
-  `idclient` int(11) NOT NULL,
-  `idproduit` int(11) NOT NULL,
+  `idabonnement` int NOT NULL,
+  `idclient` int NOT NULL,
+  `idproduit` int NOT NULL,
   `datedebut` date DEFAULT NULL,
   `datefin` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -53,8 +52,8 @@ INSERT INTO `abonnements` (`idabonnement`, `idclient`, `idproduit`, `datedebut`,
 --
 
 CREATE TABLE `adherence` (
-  `idadherence` int(11) NOT NULL,
-  `idclient` int(11) NOT NULL,
+  `idadherence` int NOT NULL,
+  `idclient` int NOT NULL,
   `datedebut` date DEFAULT NULL,
   `datefin` date DEFAULT NULL,
   `typeadhesion` varchar(255) DEFAULT NULL
@@ -71,11 +70,24 @@ INSERT INTO `adherence` (`idadherence`, `idclient`, `datedebut`, `datefin`, `typ
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `calendriers`
+--
+
+CREATE TABLE `calendriers` (
+  `idcalendrier` int NOT NULL,
+  `idtournee` int NOT NULL,
+  `datelivraison` date NOT NULL,
+  `frequence` int DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `clients`
 --
 
 CREATE TABLE `clients` (
-  `idclient` int(11) NOT NULL,
+  `idclient` int NOT NULL,
   `nom` varchar(255) NOT NULL,
   `prenom` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -101,11 +113,11 @@ INSERT INTO `clients` (`idclient`, `nom`, `prenom`, `email`, `telephone`, `adres
 --
 
 CREATE TABLE `commandes` (
-  `idcommande` int(11) NOT NULL,
-  `idclient` int(11) NOT NULL,
+  `idcommande` int NOT NULL,
+  `idclient` int NOT NULL,
   `datecommande` date NOT NULL,
   `datelivraison` date NOT NULL,
-  `idpointdedepot` int(11) NOT NULL,
+  `idpointdedepot` int NOT NULL,
   `etat` varchar(50) DEFAULT 'En préparation'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -123,7 +135,7 @@ INSERT INTO `commandes` (`idcommande`, `idclient`, `datecommande`, `datelivraiso
 --
 
 CREATE TABLE `pointsdedepot` (
-  `idpointdedepot` int(11) NOT NULL,
+  `idpointdedepot` int NOT NULL,
   `nom` varchar(255) NOT NULL,
   `adresse` text,
   `latitude` double DEFAULT NULL,
@@ -146,7 +158,7 @@ INSERT INTO `pointsdedepot` (`idpointdedepot`, `nom`, `adresse`, `latitude`, `lo
 --
 
 CREATE TABLE `produits` (
-  `idproduit` int(11) NOT NULL,
+  `idproduit` int NOT NULL,
   `nom` varchar(255) NOT NULL,
   `description` text,
   `unite` varchar(50) DEFAULT NULL,
@@ -169,10 +181,10 @@ INSERT INTO `produits` (`idproduit`, `nom`, `description`, `unite`, `imageurl`) 
 --
 
 CREATE TABLE `tourneepointsdedepot` (
-  `idtourneepoint` int(11) NOT NULL,
-  `idtournee` int(11) NOT NULL,
-  `idpointdedepot` int(11) NOT NULL,
-  `ordrelivraison` int(11) NOT NULL
+  `idtourneepoint` int NOT NULL,
+  `idtournee` int NOT NULL,
+  `idpointdedepot` int NOT NULL,
+  `ordrelivraison` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -190,7 +202,7 @@ INSERT INTO `tourneepointsdedepot` (`idtourneepoint`, `idtournee`, `idpointdedep
 --
 
 CREATE TABLE `tournees` (
-  `idtournee` int(11) NOT NULL,
+  `idtournee` int NOT NULL,
   `libelletournee` varchar(50) NOT NULL,
   `jourpreparation` date DEFAULT NULL,
   `jourlivraison` date DEFAULT NULL,
@@ -223,6 +235,13 @@ ALTER TABLE `abonnements`
 ALTER TABLE `adherence`
   ADD PRIMARY KEY (`idadherence`),
   ADD KEY `ClientID` (`idclient`);
+
+--
+-- Index pour la table `calendriers`
+--
+ALTER TABLE `calendriers`
+  ADD PRIMARY KEY (`idcalendrier`),
+  ADD KEY `idtournee` (`idtournee`);
 
 --
 -- Index pour la table `clients`
@@ -273,49 +292,55 @@ ALTER TABLE `tournees`
 -- AUTO_INCREMENT pour la table `abonnements`
 --
 ALTER TABLE `abonnements`
-  MODIFY `idabonnement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idabonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `adherence`
 --
 ALTER TABLE `adherence`
-  MODIFY `idadherence` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idadherence` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `calendriers`
+--
+ALTER TABLE `calendriers`
+  MODIFY `idcalendrier` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `idclient` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idclient` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `commandes`
 --
 ALTER TABLE `commandes`
-  MODIFY `idcommande` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idcommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `pointsdedepot`
 --
 ALTER TABLE `pointsdedepot`
-  MODIFY `idpointdedepot` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idpointdedepot` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `idproduit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idproduit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `tourneepointsdedepot`
 --
 ALTER TABLE `tourneepointsdedepot`
-  MODIFY `idtourneepoint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idtourneepoint` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `tournees`
 --
 ALTER TABLE `tournees`
-  MODIFY `idtournee` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idtournee` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Contraintes pour les tables déchargées
@@ -333,6 +358,12 @@ ALTER TABLE `abonnements`
 --
 ALTER TABLE `adherence`
   ADD CONSTRAINT `adherence_ibfk_1` FOREIGN KEY (`idclient`) REFERENCES `clients` (`idclient`);
+
+--
+-- Contraintes pour la table `calendriers`
+--
+ALTER TABLE `calendriers`
+  ADD CONSTRAINT `calendriers_ibfk_1` FOREIGN KEY (`idtournee`) REFERENCES `tournees` (`idtournee`);
 
 --
 -- Contraintes pour la table `commandes`

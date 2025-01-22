@@ -51,7 +51,7 @@
         <button type="submit">Créer la tournée</button>
     </form>
 
-    <h2>Liste des Tournées</h2>
+    <h2><span>Liste des Tournées</span></h2>
     <ul>
         <?php foreach ($tournees as $tournee): ?>
             <li>

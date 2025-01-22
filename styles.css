@@ -1,5 +1,4 @@
 /* Navbar */
-
 .container-fluid img{
     height: 5%;
     width: 5%;
@@ -14,15 +13,60 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-image: url("imgs/fond.png");
+    background-position: top;
+    background-size: cover;
     background-color: #f5f5f5;
-    color: #333;
+    background-repeat: no-repeat;
 }
 
+
+/* Liste index */
+.liste-index li{
+    color: black;
+    margin: 10px 0;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+
+.liste-index li a{
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 12px 0;
+    padding: 15px 25px;
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+}
+
+
+.liste-index li:hover {
+    background-color: #e3e3e3;
+    color: white;
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
 /* Titres */ 
+h1{
+    margin-top: 2%;
+}
+
 h1, h2 {
     color: #2e7d32; 
     text-align: center;
 }
+
 
 /* Formulaire */
 form {

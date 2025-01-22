@@ -31,12 +31,13 @@
     <title>Accueil - Jardins de Cocagne</title>
 </head>
 <body>
-    <h1>Gestion des Jardins de Cocagne</h1>
-    <p>Que voulez vous faire?</p>
+    <h1><span>Gestion des Jardins de Cocagne</span></h1>
+    <div class="liste-index">
     <ul>
         <li><a href="tournee.php">Gestion des tournées</a></li>
         <li><a href="calendrier.php">Gestion des calendriers</a></li>
         <li><a href="commande.php">Tunnel de commande</a></li>
     </ul>
+    </div>
 </body>
 </html>
