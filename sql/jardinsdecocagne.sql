@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : mer. 22 jan. 2025 à 17:47
+-- Généré le : jeu. 23 jan. 2025 à 03:44
 -- Version du serveur : 8.0.41
 -- Version de PHP : 8.2.27
 
@@ -115,18 +115,24 @@ INSERT INTO `clients` (`idclient`, `nom`, `prenom`, `email`, `telephone`, `adres
 CREATE TABLE `commandes` (
   `idcommande` int NOT NULL,
   `idclient` int NOT NULL,
+  `idabonnement` int NOT NULL,
   `datecommande` date NOT NULL,
   `datelivraison` date NOT NULL,
   `idpointdedepot` int NOT NULL,
   `etat` varchar(50) DEFAULT 'En préparation'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `commandes`
+-- Déclencheurs `commandes`
 --
-
-INSERT INTO `commandes` (`idcommande`, `idclient`, `datecommande`, `datelivraison`, `idpointdedepot`, `etat`) VALUES
-(1, 1, '2025-01-12', '2025-01-19', 1, 'En préparation');
+DELIMITER $$
+CREATE TRIGGER `before_insert_commandes` BEFORE INSERT ON `commandes` FOR EACH ROW BEGIN
+  IF NEW.datecommande IS NULL THEN
+    SET NEW.datecommande = CURRENT_DATE;
+  END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -256,6 +262,7 @@ ALTER TABLE `clients`
 ALTER TABLE `commandes`
   ADD PRIMARY KEY (`idcommande`),
   ADD KEY `ClientID` (`idclient`),
+  ADD KEY `AbonnementID` (`idabonnement`),
   ADD KEY `PointDeDepotID` (`idpointdedepot`);
 
 --
@@ -316,7 +323,7 @@ ALTER TABLE `clients`
 -- AUTO_INCREMENT pour la table `commandes`
 --
 ALTER TABLE `commandes`
-  MODIFY `idcommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idcommande` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `pointsdedepot`
@@ -370,7 +377,8 @@ ALTER TABLE `calendriers`
 --
 ALTER TABLE `commandes`
   ADD CONSTRAINT `commandes_ibfk_1` FOREIGN KEY (`idclient`) REFERENCES `clients` (`idclient`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `commandes_ibfk_2` FOREIGN KEY (`idpointdedepot`) REFERENCES `pointsdedepot` (`idpointdedepot`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `commandes_ibfk_2` FOREIGN KEY (`idpointdedepot`) REFERENCES `pointsdedepot` (`idpointdedepot`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `commandes_ibfk_3` FOREIGN KEY (`idabonnement`) REFERENCES `abonnements` (`idabonnement`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `tourneepointsdedepot`
